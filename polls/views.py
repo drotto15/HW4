@@ -1,9 +1,9 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-
 from polls.models import Question
 from django.utils import timezone
+from django.views import generic
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -50,7 +50,9 @@ class IndexView(generic.ListView):
 		).order_by('-pub_date')[:5]
 		
 class DetailView(generic.DetailView):
-    ...
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
+		
     def get_queryset(self):
         """
         Excludes any questions that aren't published yet.
